@@ -1,0 +1,59 @@
+﻿<UserControl
+    x:Class="StudentManagement.Components.SettingInfoItem"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:component="clr-namespace:StudentManagement.Components"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:local="clr-namespace:StudentManagement.Components"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:utils="clr-namespace:StudentManagement.Utils"
+    xmlns:viewmodels="clr-namespace:StudentManagement.ViewModels"
+    x:Name="NotificationComponent"
+    HorizontalAlignment="Stretch"
+    VerticalAlignment="Stretch"
+    HorizontalContentAlignment="Stretch"
+    VerticalContentAlignment="Stretch"
+    d:DesignHeight="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}, Converter={utils:RatioConverter}, ConverterParameter='0.84'}"
+    d:DesignWidth="{Binding Source={x:Static SystemParameters.PrimaryScreenWidth}, Converter={utils:RatioConverter}, ConverterParameter='0.49'}"
+    Background="{DynamicResource Transparent}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    mc:Ignorable="d">
+    <Grid>
+        <Expander
+            Margin="-16,0,0,0"
+            HorizontalAlignment="Stretch"
+            Background="Transparent"
+            Header="{Binding CurrendInfoItem.LabelName}">
+            <Grid>
+                <ContentControl>
+
+                    <!--<ContentControl.Resources>
+                        <DataTemplate >
+
+                        </DataTemplate>
+                    </ContentControl.Resources>-->
+                    <component:EditInfoItemInSetting MinWidth="600" Background="Transparent" />
+
+                </ContentControl>
+            </Grid>
+            <Expander.ContextMenu>
+                <ContextMenu>
+                    <MenuItem
+                        Command="{Binding DeleteInfoItemCommand}"
+                        Foreground="{StaticResource ErrorMain}"
+                        Header="Xóa thông tin"
+                        Icon="{materialDesign:PackIcon Kind=DeleteOutline}" />
+                </ContextMenu>
+            </Expander.ContextMenu>
+        </Expander>
+    </Grid>
+
+
+</UserControl>

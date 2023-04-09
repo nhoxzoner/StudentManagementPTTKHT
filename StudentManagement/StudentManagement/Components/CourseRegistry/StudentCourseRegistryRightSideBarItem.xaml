@@ -1,0 +1,195 @@
+﻿<UserControl
+    x:Class="StudentManagement.Components.StudentCourseRegistryRightSideBarItem"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:StudentManagement.Components"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:math="http://hexinnovation.com/math"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:utils="clr-namespace:StudentManagement.Utils"
+    d:DesignHeight="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}, Converter={utils:RatioConverter}, ConverterParameter='0.84'}"
+    d:DesignWidth="{Binding Source={x:Static SystemParameters.PrimaryScreenWidth}, Converter={utils:RatioConverter}, ConverterParameter='0.21'}"
+    Background="{StaticResource SideBar}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <math:MathConverter x:Key="math" />
+    </UserControl.Resources>
+    <ScrollViewer
+        Grid.Row="0"
+        VerticalScrollBarVisibility="Auto">
+        <StackPanel
+            Margin="8">
+            <TextBlock
+                FontWeight="Bold"
+                Margin="0 0 0 8"
+                Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                Text="Thông tin chi tiết"
+                TextWrapping="Wrap" />
+            <Grid
+                Style="{StaticResource text_grid_item}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock
+                    Grid.Column="0"
+                    FontWeight="Bold"
+                    Style="{StaticResource textblock_item}"
+                    Text="Môn học:" />
+                <TextBlock
+                    Grid.Column="1"
+                    Style="{StaticResource textblock_item}"
+                    Text="{Binding CurrentItem.Subject.DisplayName, FallbackValue='Ten Mon Hoc'}"
+                    TextAlignment="Right"
+                    ToolTip="{Binding CurrentItem.Subject.DisplayName}"/>
+            </Grid>
+
+            <Grid
+                Style="{StaticResource text_grid_item}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock
+                    Grid.Column="0"
+                    FontWeight="Bold"
+                    Style="{StaticResource textblock_item}"
+                    Text="Mã môn học:" />
+                <TextBlock
+                    Grid.Column="1"
+                    Style="{StaticResource textblock_item}"
+                    Text="{Binding CurrentItem.Subject.Code, FallbackValue='Mã Mon Hoc'}"
+                    TextAlignment="Right" />
+            </Grid>
+            <Grid
+                Style="{StaticResource text_grid_item}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock
+                    Grid.Column="0"
+                    FontWeight="Bold"
+                    Style="{StaticResource textblock_item}"
+                    Text="Mã lớp học:" />
+                <TextBlock
+                    Grid.Column="1"
+                    Style="{StaticResource textblock_item}"
+                    Text="{Binding CurrentItem.Code, FallbackValue='Code'}"
+                    TextAlignment="Right" />
+            </Grid>
+            <Grid
+                Style="{StaticResource text_grid_item}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock
+                    Grid.Column="0"
+                    FontWeight="Bold"
+                    Style="{StaticResource textblock_item}"
+                    Text="Giáo viên:" />
+                <TextBlock
+                    x:Name="txblockTeacherName"
+                    Grid.Column="1"
+                    Style="{StaticResource textblock_item}"
+                    Text="{Binding CurrentItem.MainTeacher.User.DisplayName, FallbackValue='Chưa có'}"
+                    TextAlignment="Right" />
+            </Grid>
+            <Grid
+                Style="{StaticResource text_grid_item}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock
+                    Grid.Column="0"
+                    FontWeight="Bold"
+                    Style="{StaticResource textblock_item}"
+                    Text="Hệ đào tạo:" />
+                <TextBlock
+                    Grid.Column="1"
+                    Style="{StaticResource textblock_item}"
+                    Text="{Binding CurrentItem.TrainingForm.DisplayName, FallbackValue='Hệ đào tạo'}"
+                    TextAlignment="Right" />
+            </Grid>
+            <Grid
+                Style="{StaticResource text_grid_item}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock
+                    Grid.Column="0"
+                    FontWeight="Bold"
+                    Style="{StaticResource textblock_item}"
+                    Text="Ngày bắt đầu:" />
+                <TextBlock
+                    Grid.Column="1"
+                    Style="{StaticResource textblock_item}"
+                    Text="{Binding CurrentItem.StartDate, StringFormat='dd/MM/yyyy'}"
+                    TextAlignment="Right" />
+            </Grid>
+            <Grid
+                Style="{StaticResource text_grid_item}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock
+                    Grid.Column="0"
+                    FontWeight="Bold"
+                    Style="{StaticResource textblock_item}"
+                    Text="Ngày kết thúc:" />
+                <TextBlock
+                    Grid.Column="1"
+                    Style="{StaticResource textblock_item}"
+                    Text="{Binding CurrentItem.EndDate, StringFormat='dd/MM/yyyy'}"
+                    TextAlignment="Right" />
+            </Grid>
+            <Grid
+                Style="{StaticResource text_grid_item}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock
+                    Grid.Column="0"
+                    FontWeight="Bold"
+                    Style="{StaticResource textblock_item}"
+                    Text="Lịch học:" />
+                <TextBlock
+                    Grid.Column="1"
+                    Style="{StaticResource textblock_item}"
+                    TextAlignment="Right">
+                    <TextBlock.Text>
+                        <MultiBinding
+                            StringFormat="Thứ {0}, Tiết {1}">
+                            <Binding
+                                Converter="{StaticResource math}"
+                                ConverterParameter="x+2"
+                                Path="CurrentItem.WeekDay" />
+                            <Binding
+                                Path="CurrentItem.Period" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

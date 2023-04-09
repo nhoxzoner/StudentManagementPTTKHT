@@ -1,0 +1,32 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    <SolidColorBrush x:Key="PrimaryLight" Color="#5c6bc0" />
+    <SolidColorBrush x:Key="PrimaryMain" Color="#3f51b5" />
+    <SolidColorBrush x:Key="PrimaryDark" Color="#303f9f" />
+    <SolidColorBrush x:Key="ErrorLight" Color="#ef5350" />
+    <SolidColorBrush x:Key="ErrorMain" Color="#d32f2f" />
+    <SolidColorBrush x:Key="White" Color="#FFFFFF" />
+    <!--<SolidColorBrush x:Key="SideBar" Color="#f0f2f5" />-->
+    <!--<SolidColorBrush x:Key="CenterColumn" Color="#FFFFFF" />-->
+    <SolidColorBrush x:Key="CenterColumn" Color="Transparent" />
+    <!--<SolidColorBrush x:Key="SideBar" Color="#FFFFFF" />-->
+    <SolidColorBrush x:Key="SideBar" Color="Transparent" />
+    <SolidColorBrush x:Key="SelectedItemGray" Color="#e3e3e3" />
+    <SolidColorBrush x:Key="Gray" Color="#f6f7fb" />
+    <SolidColorBrush x:Key="Transparent" Color="Transparent" />
+    <SolidColorBrush x:Key="Black" Color="Black" />
+    <SolidColorBrush x:Key="DarkGray" Color="#b0b0b0" />
+    <SolidColorBrush x:Key="Background" Color="#f0f2f5" />
+    <SolidColorBrush x:Key="BlueStatus" Color="#03a9f4" />
+    <SolidColorBrush x:Key="SecondaryMain" Color="#673ab7" />
+    <SolidColorBrush x:Key="Green" Color="#408400" />
+    <SolidColorBrush x:Key="Orange" Color="Orange" />
+    <SolidColorBrush x:Key="LightGreen" Color="LightGreen" />
+    <SolidColorBrush x:Key="BlackDefault" Color="#DD000000" />
+    <SolidColorBrush x:Key="GenaralInNotification" Color="#FA383E" />
+    <SolidColorBrush x:Key="CommentNotification" Color="#00A400" />
+    <SolidColorBrush x:Key="ClassNotification" Color="#1877F2" />
+
+</ResourceDictionary>

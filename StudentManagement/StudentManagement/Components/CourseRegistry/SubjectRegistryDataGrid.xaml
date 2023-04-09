@@ -1,0 +1,185 @@
+﻿<UserControl
+    x:Class="StudentManagement.Components.SubjectRegistryDataGrid"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:local="clr-namespace:StudentManagement.Components"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:math="http://hexinnovation.com/math"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="CourseDataGrid"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <math:MathConverter x:Key="math" />
+    </UserControl.Resources>
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <DataGrid
+                HorizontalAlignment="Stretch"
+                AutoGenerateColumns="False"
+                CanUserAddRows="False"
+                HeadersVisibility="All"
+                ItemsSource="{Binding Path=Data, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ElementName=CourseDataGrid}"
+                PreviewMouseWheel="DataGrid_PreviewMouseWheel"
+                SelectedItem="{Binding Tag, Mode=OneWayToSource, ElementName=CourseDataGrid}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="BeginningEdit">
+                        <i:InvokeCommandAction
+                            Command="{Binding Path=DataContext.CourseCheckChangedCommand, ElementName=CourseDataGrid}"
+                            IsEnabled="{Binding ElementName=CourseDataGrid, Path=IsCatchEditEvent}"
+                            PassEventArgsToCommand="True" />
+                        <i:ChangePropertyAction
+                            IsEnabled="{Binding ElementName=CourseDataGrid, Path=IsCatchEditEvent}"
+                            PropertyName="SelectedValue"
+                            Value="False" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <DataGrid.RowStyle>
+                    <Style BasedOn="{StaticResource MaterialDesignDataGridRow}" TargetType="{x:Type DataGridRow}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsConflict}" Value="True">
+                                <Setter Property="Opacity" Value="0.5" />
+                                <Setter Property="Foreground" Value="Red" />
+                                <Setter Property="ToolTip" Value="Trùng giờ học" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsValidSubject}" Value="True">
+                                <Setter Property="Opacity" Value="0.5" />
+                                <Setter Property="Foreground" Value="DarkBlue" />
+                                <Setter Property="ToolTip" Value="Trùng môn học" />
+                            </DataTrigger>
+                        </Style.Triggers>
+
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.Columns>
+                    <DataGridCheckBoxColumn
+                        Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                        EditingElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnEditingStyle}"
+                        ElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnStyle}">
+                        <!--<i:Interaction.Triggers>
+                            <i:DataTrigger
+                                Binding="IsSelected" Value="True">
+                                <i:InvokeCommandAction
+                                    Command="{Binding Source={StaticResource StudentCourseRegistryVM}, Path=CourseUncheckedCommand}" CommandParameter="{ItemContainerTemplateKey}" />
+                            </i:DataTrigger>
+                        </i:Interaction.Triggers>-->
+                        <DataGridCheckBoxColumn.Header>
+                            <Border Background="Transparent">
+                                <CheckBox IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=IsAllItemsSelected}" />
+                            </Border>
+                        </DataGridCheckBoxColumn.Header>
+                        <DataGridCheckBoxColumn.HeaderStyle>
+                            <Style BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}" TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            </Style>
+                        </DataGridCheckBoxColumn.HeaderStyle>
+                    </DataGridCheckBoxColumn>
+                    <DataGridTextColumn
+                        Binding="{Binding Code, Mode=OneWay}"
+                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                        Header="Mã lớp học" />
+                    <materialDesign:DataGridTextColumn ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}" Header="Tên môn học">
+                        <materialDesign:DataGridTextColumn.Binding>
+                            <Binding Mode="OneWay" Path="Subject.DisplayName" />
+                        </materialDesign:DataGridTextColumn.Binding>
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn
+                        Width="auto"
+                        Binding="{Binding Subject.Credit, Mode=OneWay}"
+                        EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+                        Header="Số tín chỉ">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}" TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                <Setter Property="ContentTemplate">
+                                    <Setter.Value>
+                                        <DataTemplate>
+                                            <TextBlock
+                                                Text="{Binding}"
+                                                TextAlignment="Right"
+                                                TextWrapping="Wrap" />
+                                        </DataTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                        <DataGridTextColumn.ElementStyle>
+                            <Style BasedOn="{StaticResource MaterialDesignDataGridTextColumnStyle}" TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </materialDesign:DataGridTextColumn>
+                    <DataGridTextColumn
+                        Binding="{Binding WeekDay, Mode=OneWay, Converter={StaticResource math}, ConverterParameter='x+2'}"
+                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                        Header="Thứ" />
+                    <materialDesign:DataGridTextColumn
+                        Binding="{Binding Period, Mode=OneWay}"
+                        ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
+                        Header="Tiết" />
+                    <materialDesign:DataGridTextColumn
+                        Width="auto"
+                        Binding="{Binding MaxNumberOfStudents, Mode=OneWay}"
+                        EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+                        Header="Giới hạn">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}" TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                <Setter Property="ContentTemplate">
+                                    <Setter.Value>
+                                        <DataTemplate>
+                                            <TextBlock
+                                                Text="{Binding}"
+                                                TextAlignment="Right"
+                                                TextWrapping="Wrap" />
+                                        </DataTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                        <DataGridTextColumn.ElementStyle>
+                            <Style BasedOn="{StaticResource MaterialDesignDataGridTextColumnStyle}" TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </materialDesign:DataGridTextColumn>
+                    <!--  use custom combo box column to get better combos. Use ItemsSourceBinding as your binding template to be applied to each combo  -->
+                    <materialDesign:DataGridTextColumn
+                        Width="auto"
+                        Binding="{Binding NumberOfStudents, Mode=OneWay}"
+                        EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+                        Header="Đã đăng ký">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}" TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                <Setter Property="ContentTemplate">
+                                    <Setter.Value>
+                                        <DataTemplate>
+                                            <TextBlock
+                                                Text="{Binding}"
+                                                TextAlignment="Right"
+                                                TextWrapping="Wrap" />
+                                        </DataTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                        <DataGridTextColumn.ElementStyle>
+                            <Style BasedOn="{StaticResource MaterialDesignDataGridTextColumnStyle}" TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </materialDesign:DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

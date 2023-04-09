@@ -1,0 +1,81 @@
+﻿<UserControl
+    x:Class="StudentManagement.Views.NewfeedSubjectClassDetail"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:components="clr-namespace:StudentManagement.Components"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:StudentManagement.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+    xmlns:utils="clr-namespace:StudentManagement.Utils"
+    d:DesignHeight="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}, Converter={utils:RatioConverter}, ConverterParameter='0.84'}"
+    d:DesignWidth="{Binding Source={x:Static SystemParameters.PrimaryScreenWidth}, Converter={utils:RatioConverter}, ConverterParameter='0.49'}"
+    Background="{StaticResource CenterColumn}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    mc:Ignorable="d">
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel VerticalAlignment="Top" Orientation="Vertical">
+                <StackPanel.Resources>
+                    <CollectionViewSource x:Key="PostNewsFeedView" Source="{Binding PostNewsfeedViewModels}">
+                        <CollectionViewSource.SortDescriptions>
+                            <scm:SortDescription Direction="Descending" PropertyName="Post.PostTime" />
+                        </CollectionViewSource.SortDescriptions>
+                    </CollectionViewSource>
+                </StackPanel.Resources>
+                <components:CreatePostNewfeed
+                    MaxHeight="350"
+                    Margin="2"
+                    DataContext="{Binding CreatePostNewFeedViewModel}" />
+
+                <components:EmptyStateRightSideBar
+                    Width="600"
+                    Height="300"
+                    Guideline="Không có bài đăng nào trong lớp học.">
+                    <components:EmptyStateRightSideBar.Style>
+                        <Style TargetType="components:EmptyStateRightSideBar">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding PostNewsfeedViewModels.Count}" Value="0">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding PostNewsfeedViewModels}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </components:EmptyStateRightSideBar.Style>
+                </components:EmptyStateRightSideBar>
+
+                <ItemsControl ItemsSource="{Binding Source={StaticResource PostNewsFeedView}}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <components:PostNewsfeed Height="auto" Margin="2,16,2,2" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+        <!--<materialDesign:Snackbar
+            x:Name="MySnackbar"
+            Background="{StaticResource Background}"
+            FontSize="16"
+            ActionButtonStyle="{StaticResource MaterialDesignSnackbarActionButton}"
+            FontWeight="SemiBold"
+            Foreground="{StaticResource Black}"
+            IsActive="True">
+            <materialDesign:SnackbarMessage ActionContent="UNDO" Content="Hello Hello Hello Hello Hello Hello Hello" />
+        </materialDesign:Snackbar>-->
+    </Grid>
+</UserControl>

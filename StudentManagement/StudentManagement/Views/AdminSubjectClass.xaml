@@ -1,0 +1,168 @@
+﻿<UserControl
+    x:Class="StudentManagement.Views.AdminSubjectClass"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:component="clr-namespace:StudentManagement.Components"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:StudentManagement.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:math="http://hexinnovation.com/math"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:utils="clr-namespace:StudentManagement.Utils"
+    xmlns:views="clr-namespace:StudentManagement.Views"
+    x:Name="AdminSubjectClassUC"
+    d:DesignHeight="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}, Converter={utils:RatioConverter}, ConverterParameter='0.84'}"
+    d:DesignWidth="{Binding Source={x:Static SystemParameters.PrimaryScreenWidth}, Converter={utils:RatioConverter}, ConverterParameter='0.49'}"
+    Background="{StaticResource CenterColumn}"
+    DataContext="{DynamicResource AdminSubjectClassVM}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    mc:Ignorable="d">
+    <materialDesign:Card Style="{StaticResource CardContainer}">
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
+            <Grid>
+                <Grid.Resources>
+                    <math:MathConverter x:Key="math" />
+                </Grid.Resources>
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                            Grid.Column="0"
+                            Margin="16"
+                            FontWeight="Bold"
+                            Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                            Text="Danh sách lớp môn học" />
+                        <Button
+                            Grid.Column="1"
+                            Width="45"
+                            Height="45"
+                            Margin="16,0"
+                            HorizontalAlignment="Right"
+                            materialDesign:ButtonProgressAssist.IndicatorBackground="Transparent"
+                            materialDesign:ButtonProgressAssist.IsIndeterminate="True"
+                            materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding InLoadingSubjectClass}"
+                            materialDesign:ButtonProgressAssist.Value="-1"
+                            materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                            Background="{DynamicResource PrimaryMain}"
+                            Command="{Binding SynchronizeSubjectClass}"
+                            Foreground="White"
+                            Style="{StaticResource MaterialDesignFloatingActionLightButton}">
+                            <!--  simple example of toggling/animating pack icon with a data trigger  -->
+                            <materialDesign:PackIcon Width="24" Height="24">
+                                <materialDesign:PackIcon.Style>
+                                    <Style BasedOn="{StaticResource {x:Type materialDesign:PackIcon}}" TargetType="materialDesign:PackIcon">
+                                        <Setter Property="Kind" Value="CloudSync" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsSaveComplete}" Value="True">
+                                                <Setter Property="Kind" Value="Check" />
+                                                <DataTrigger.EnterActions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <DoubleAnimation
+                                                                Storyboard.TargetProperty="Opacity"
+                                                                From="0"
+                                                                To="1"
+                                                                Duration="0:0:0.8" />
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </DataTrigger.EnterActions>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </materialDesign:PackIcon.Style>
+                            </materialDesign:PackIcon>
+                        </Button>
+                    </Grid>
+                    <Grid Margin="16" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="5.5*" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="{Binding Converter={utils:PropertyByRoleConverter}, ConverterParameter='SearchBarOneButton'}" />
+                        </Grid.ColumnDefinitions>
+                        <component:SearchBarOne
+                            Grid.Column="0"
+                            DataContext="{DynamicResource AdminSubjectClassVM}"
+                            DatePickerVisibility="False"
+                            FirstSearchButtonText="Mã lớp"
+                            IsFirstSearchButtonEnabled="{Binding IsFirstSearchButtonEnabled}"
+                            SearchCommand="{Binding SearchSubjectClassCards}"
+                            SearchQuery="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            SecondSearchButtonText="Giáo viên"
+                            SwitchSearchButton="{Binding SwitchSearchButton}" />
+                        <ComboBox
+                            Grid.Column="1"
+                            Height="51"
+                            Margin="8,0,0,0"
+                            Padding="8,4"
+                            VerticalAlignment="Center"
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            materialDesign:ComboBoxAssist.ShowSelectedItem="True"
+                            materialDesign:HintAssist.Hint="Chọn học kỳ"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            ItemsSource="{Binding Semesters, UpdateSourceTrigger=PropertyChanged}"
+                            SelectedItem="{Binding SelectedSemester}"
+                            Style="{StaticResource combobox_item}"
+                            ToolTip="Mặc định là tất cả">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock>
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                <Binding Path="DisplayName" />
+                                                <Binding Path="Batch" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <Button
+                            Grid.Column="2"
+                            Height="50"
+                            Margin="8,0,0,0"
+                            Padding="0"
+                            materialDesign:ButtonAssist.CornerRadius="8"
+                            Command="{Binding CreateSubjectClassCardInfo, Source={StaticResource AdminSubjectClassRightSideBarVM}}"
+                            Content="Thêm lớp học"
+                            FontSize="14"
+                            Visibility="{Binding Converter={utils:PropertyByRoleConverter}, ConverterParameter='Visibility2'}" />
+                    </Grid>
+                    <ItemsControl ItemsSource="{Binding SubjectClassCards}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel x:Name="Container" HorizontalAlignment="Center" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <component:SubjectClassCard>
+                                    <component:SubjectClassCard.Style>
+                                        <Style TargetType="component:SubjectClassCard">
+                                            <Setter Property="Margin" Value="8,12" />
+                                            <Setter Property="Width">
+                                                <Setter.Value>
+                                                    <MultiBinding Converter="{StaticResource math}" ConverterParameter="((x/3&gt;370?x/3:x/2) - 24 &gt; 0) ? ((x/3&gt;370?x/3:x/2) - 24) : 0">
+                                                        <Binding ElementName="AdminSubjectClassUC" Path="ActualWidth" />
+                                                    </MultiBinding>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </component:SubjectClassCard.Style>
+                                </component:SubjectClassCard>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+    </materialDesign:Card>
+</UserControl>

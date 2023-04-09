@@ -1,0 +1,274 @@
+﻿<UserControl
+    x:Class="StudentManagement.Views.StudentCourseRegistry"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:component="clr-namespace:StudentManagement.Components"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:StudentManagement.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:math="http://hexinnovation.com/math"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:utils="clr-namespace:StudentManagement.Utils"
+    xmlns:views="clr-namespace:StudentManagement.Views"
+    x:Name="StudentCRUserControl"
+    d:DesignHeight="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}, Converter={utils:RatioConverter}, ConverterParameter='0.84'}"
+    d:DesignWidth="{Binding Source={x:Static SystemParameters.PrimaryScreenWidth}, Converter={utils:RatioConverter}, ConverterParameter='0.49'}"
+    Background="{StaticResource CenterColumn}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <math:MathConverter x:Key="math" />
+    </UserControl.Resources>
+    <Grid x:Name="MainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="55*" />
+            <RowDefinition Height="45*" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Panel.ZIndex="1">
+            <Button
+                Width="45"
+                Height="45"
+                Margin="0,16,16,0"
+                HorizontalAlignment="Right"
+                materialDesign:ButtonProgressAssist.IndicatorBackground="Transparent"
+                materialDesign:ButtonProgressAssist.IsIndeterminate="True"
+                materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding InLoadingCourseRegistries}"
+                materialDesign:ButtonProgressAssist.Value="-1"
+                materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                Background="{DynamicResource PrimaryMain}"
+                Command="{Binding SynchronizeCourseRegistry}"
+                Foreground="White"
+                Style="{StaticResource MaterialDesignFloatingActionLightButton}">
+                <!--  simple example of toggling/animating pack icon with a data trigger  -->
+                <materialDesign:PackIcon Width="24" Height="24">
+                    <materialDesign:PackIcon.Style>
+                        <Style BasedOn="{StaticResource {x:Type materialDesign:PackIcon}}" TargetType="materialDesign:PackIcon">
+                            <Setter Property="Kind" Value="CloudSync" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsSaveComplete}" Value="True">
+                                    <Setter Property="Kind" Value="Check" />
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation
+                                                    Storyboard.TargetProperty="Opacity"
+                                                    From="0"
+                                                    To="1"
+                                                    Duration="0:0:0.8" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.EnterActions>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </materialDesign:PackIcon.Style>
+                </materialDesign:PackIcon>
+            </Button>
+            <TextBlock
+                Margin="8,8,16,8"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top">
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource math}" ConverterParameter="format(&quot;{0}, {1}&quot;, x, y)">
+                        <Binding Path="CurrentSemester.Batch" />
+                        <Binding Path="CurrentSemester.DisplayName" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+        </StackPanel>
+
+        <materialDesign:Card
+            Grid.Row="0"
+            Margin="0,0,0,16"
+            Style="{StaticResource CardContainer}">
+            <DockPanel LastChildFill="True">
+
+                <TextBlock
+                    Margin="10"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    DockPanel.Dock="Bottom">
+                    <Run
+                        Text="Số tín chỉ đã đăng ký: " />
+                    <Run
+                        Text="{Binding TotalCredit, FallbackValue=0}" />
+                </TextBlock>
+                <StackPanel DockPanel.Dock="Top">
+                    <TabControl
+                        Margin="0"
+                        HorizontalContentAlignment="Left"
+                        Background="Transparent"
+                        Style="{StaticResource MaterialDesignNavigatilRailTabControl}"
+                        TabStripPlacement="Top">
+
+                        <TabItem Margin="4">
+                            <TabItem.Header>
+                                <StackPanel Width="auto" Height="auto">
+                                    <materialDesign:PackIcon
+                                        Width="24"
+                                        Height="24"
+                                        HorizontalAlignment="Center"
+                                        Kind="ViewListOutline" />
+                                    <TextBlock HorizontalAlignment="Center" Text="Danh sách" />
+                                </StackPanel>
+                            </TabItem.Header>
+
+                            <Grid x:Name="RegisteredGrid" Grid.Row="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="auto" />
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock
+                                        Grid.Column="0"
+                                        Margin="16,0,0,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="24"
+                                        FontWeight="Bold"
+                                        Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                                        Text="Danh sách đã đăng ký" />
+                                    <Button
+                                        Grid.Column="1"
+                                        Width="120"
+                                        Height="40"
+                                        Margin="16,16,16,16"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center"
+                                        materialDesign:ButtonAssist.CornerRadius="8"
+                                        Background="#FFF24726"
+                                        BorderBrush="Transparent"
+                                        Command="{Binding UnregisterCommand}"
+                                        Content="Hủy đăng ký"
+                                        Style="{StaticResource PrimaryButton}" />
+                                </Grid>
+                                <component:SubjectRegistryDataGrid
+                                    Grid.Row="1"
+                                    Width="{Binding ElementName=MainGrid, Path=Width}"
+                                    MaxHeight="160"
+                                    Data="{Binding CourseRegistryItems1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    DataContext="{Binding ElementName=MainGrid, Path=DataContext}"
+                                    IsAllItemsSelected="{Binding IsAllItemsSelected1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Tag="{Binding SelectedItem, Mode=OneWayToSource, Source={StaticResource StudentCourseRegistryRightSideBarVM}}" />
+                            </Grid>
+                        </TabItem>
+                        <TabItem>
+                            <TabItem.Header>
+                                <StackPanel Width="auto" Height="auto">
+                                    <materialDesign:PackIcon
+                                        Width="24"
+                                        Height="24"
+                                        HorizontalAlignment="Center"
+                                        Kind="TableLarge" />
+                                    <TextBlock HorizontalAlignment="Center" Text="TKB" />
+                                </StackPanel>
+                            </TabItem.Header>
+                            <Grid>
+                                <component:ScheduleTable Margin="8" Tag="{Binding ScheduleItemsRegistered}" />
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
+                </StackPanel>
+            </DockPanel>
+
+
+        </materialDesign:Card>
+        <materialDesign:Card
+            Grid.Row="1"
+            Margin="0,8,0,0"
+            Style="{StaticResource CardContainer}">
+            <Grid Grid.Row="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Grid.Column="0"
+                        Margin="16,0,0,0"
+                        VerticalAlignment="Center"
+                        FontSize="24"
+                        FontWeight="Bold"
+                        Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                        Text="Danh sách chưa đăng ký" />
+                    <Button
+                        Grid.Column="1"
+                        Width="120"
+                        Height="40"
+                        Margin="16,16,16,16"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        materialDesign:ButtonAssist.CornerRadius="8"
+                        Background="#8FD14F"
+                        BorderBrush="Transparent"
+                        Command="{Binding RegisterCommand}"
+                        Content="Đăng ký"
+                        Style="{StaticResource PrimaryButton}" />
+                </Grid>
+                <Grid Grid.Row="1">
+                    <component:SearchBarOne
+                        Margin="16,0"
+                        DatePickerVisibility="False"
+                        FirstSearchButtonText="Mã lớp"
+                        IsFirstSearchButtonEnabled="{Binding IsFirstSearchButtonEnabled}"
+                        SearchCommand="{Binding SearchCommand}"
+                        SearchQuery="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SecondSearchButtonText="Tên lớp học"
+                        SwitchSearchButton="{Binding SwitchSearchButtonCommand}" />
+                </Grid>
+                <component:SubjectRegistryDataGrid
+                    Grid.Row="2"
+                    Data="{Binding CourseRegistryItems2Display, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    DataContext="{Binding ElementName=MainGrid, Path=DataContext}"
+                    IsAllItemsSelected="{Binding IsAllItemsSelected2, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                    IsCatchEditEvent="True"
+                    Tag="{Binding SelectedItem, Mode=OneWayToSource, Source={StaticResource StudentCourseRegistryRightSideBarVM}}" />
+                <Grid Grid.Row="2" VerticalAlignment="Bottom">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <!--<Button
+                    Grid.Column="0"
+                    Width="80"
+                    Margin="20,15,20,15"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    materialDesign:ButtonAssist.CornerRadius="5"
+                    Background="#E6E6E6"
+                    Content="Trước" />-->
+                    <!--<TextBlock
+                    Grid.Column="1"
+                    VerticalAlignment="Center"
+                    FontWeight="ExtraBold"
+                    Text="{Binding PageNumber, FallbackValue='1'}" />-->
+                    <!--<Button
+                    Grid.Column="2"
+                    Width="80"
+                    Margin="20,15,20,15"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    materialDesign:ButtonAssist.CornerRadius="5"
+                    Background="#8FD14F"
+                    Content="Tiếp" />-->
+                </Grid>
+            </Grid>
+        </materialDesign:Card>
+    </Grid>
+</UserControl>

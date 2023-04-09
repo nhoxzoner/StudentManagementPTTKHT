@@ -1,0 +1,153 @@
+﻿<UserControl
+    x:Class="StudentManagement.Components.CreatePostNewfeed"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:StudentManagement.Components"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:utils="clr-namespace:StudentManagement.Utils"
+    x:Name="CreatePostNewFeedUC"
+    d:DesignHeight="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}, Converter={utils:RatioConverter}, ConverterParameter='0.3'}"
+    d:DesignWidth="{Binding Source={x:Static SystemParameters.PrimaryScreenWidth}, Converter={utils:RatioConverter}, ConverterParameter='0.49'}"
+    Background="{DynamicResource Transparent}"
+    mc:Ignorable="d">
+    <Border Background="{DynamicResource White}" CornerRadius="8">
+        <Border.Effect>
+            <DropShadowEffect
+                BlurRadius="8"
+                Opacity="0.3"
+                ShadowDepth="0"
+                Color="DarkGray" />
+        </Border.Effect>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <DockPanel Grid.Row="0">
+                <Ellipse
+                    Width="40"
+                    Height="40"
+                    Margin="16,16,4,16"
+                    VerticalAlignment="Top"
+                    DockPanel.Dock="Left"
+                    Stroke="LightGray"
+                    StrokeThickness="1">
+                    <Ellipse.Style>
+                        <Style TargetType="Ellipse">
+                            <Setter Property="Fill">
+                                <Setter.Value>
+                                    <ImageBrush ImageSource="{Binding Source={StaticResource LoginServices}, Path=CurrentUser.DatabaseImageTable.Image, TargetNullValue={StaticResource DefaultUserAvatar}}" Stretch="Uniform" />
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Source={StaticResource LoginServices}, Path=CurrentUser.IdAvatar}" Value="{x:Null}">
+                                    <Setter Property="Fill">
+                                        <Setter.Value>
+                                            <ImageBrush ImageSource="{StaticResource DefaultUserAvatar}" Stretch="Uniform" />
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Ellipse.Style>
+                </Ellipse>
+                <!--<RichTextBox
+                    Margin="4,16,16,4"
+                    local:RichTextBoxHelper.Text="{Binding DraftPostText, Mode=TwoWay}"
+                    DockPanel.Dock="Right"
+                    Style="{StaticResource RichTextBoxCreatePost}">
+                    <FlowDocument>
+                        <Paragraph>
+                            <Run
+                                Text="{Binding DraftPostText, Mode=TwoWay}" />
+                        </Paragraph>
+                    </FlowDocument>
+                </RichTextBox>-->
+                <TextBox
+                    Height="auto"
+                    MinHeight="40"
+                    MaxHeight="300"
+                    Margin="4,16,16,4"
+                    Padding="16"
+                    materialDesign:HintAssist.IsFloating="False"
+                    materialDesign:TextFieldAssist.TextFieldCornerRadius="24"
+                    AcceptsReturn="True"
+                    AcceptsTab="True"
+                    Background="{DynamicResource Gray}"
+                    DockPanel.Dock="Right"
+                    FontSize="16"
+                    HorizontalScrollBarVisibility="Disabled"
+                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                    Text="{Binding DraftPostText, Mode=TwoWay}"
+                    TextWrapping="Wrap"
+                    VerticalScrollBarVisibility="auto">
+                    <materialDesign:HintAssist.Hint>
+                        <TextBlock Text="{Binding Source={StaticResource LoginServices}, Path=CurrentUser.DisplayName, StringFormat={}Bạn\ đang\ nghĩ\ gì\,\ {0}?}" />
+                    </materialDesign:HintAssist.Hint>
+                </TextBox>
+            </DockPanel>
+
+            <ScrollViewer
+                Grid.Row="1"
+                Margin="16,0,16,0"
+                HorizontalScrollBarVisibility="Auto"
+                VerticalScrollBarVisibility="Disabled">
+                <ItemsControl ItemsSource="{Binding StackImageDraft}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel
+                                Margin="8,4,0,8"
+                                HorizontalAlignment="Right"
+                                Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button
+                                Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}, Path=DataContext.DeleteImage}"
+                                Style="{StaticResource ImageAdded}"
+                                Tag="{Binding}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <DockPanel
+                Grid.Row="2"
+                Margin="16,8,16,16"
+                HorizontalAlignment="Right">
+                <Button
+                    Margin="16,0,0,0"
+                    Command="{Binding SendPost}"
+                    DockPanel.Dock="Right"
+                    Style="{DynamicResource PrimaryButton}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center" Text="Đăng tin" />
+                        <Image
+                            Height="20"
+                            Margin="8,0,0,0"
+                            Source="{DynamicResource Send}" />
+                    </StackPanel>
+                </Button>
+                <Button
+                    Margin="16,0,0,0"
+                    Command="{Binding AddImage}"
+                    DockPanel.Dock="Right"
+                    Style="{DynamicResource PrimaryButton}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center" Text="Thêm hình" />
+                        <Image
+                            Height="20"
+                            Margin="8,0,0,0"
+                            Source="{DynamicResource AddImage}" />
+                    </StackPanel>
+                </Button>
+            </DockPanel>
+        </Grid>
+    </Border>
+</UserControl>

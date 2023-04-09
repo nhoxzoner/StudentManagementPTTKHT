@@ -1,0 +1,217 @@
+<UserControl
+    x:Class="StudentManagement.Views.SettingUserInfo"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:component="clr-namespace:StudentManagement.Components"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:local="clr-namespace:StudentManagement.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:utils="clr-namespace:StudentManagement.Utils"
+    xmlns:viewmodels="clr-namespace:StudentManagement.ViewModels"
+    xmlns:views="clr-namespace:StudentManagement.Views"
+    d:DesignHeight="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}, Converter={utils:RatioConverter}, ConverterParameter='0.84'}"
+    d:DesignWidth="{Binding Source={x:Static SystemParameters.PrimaryScreenWidth}, Converter={utils:RatioConverter}, ConverterParameter='0.49'}"
+    Background="{StaticResource CenterColumn}"
+    DataContext="{DynamicResource SettingUserInfoVM}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    mc:Ignorable="d">
+    <ScrollViewer>
+        <Grid Margin="16,8,0,8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="10*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0" VerticalAlignment="Center">
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontWeight="Bold"
+                            Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                            Text="Cài đặt thông tin" />
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+                        <Button
+                            Grid.Column="1"
+                            Command="{Binding AddNewInfoItemCommand}"
+                            Content="Thêm thông tin"
+                            Style="{StaticResource PrimaryButton}" />
+                    </Grid>
+                </Grid>
+
+                <Grid Grid.Row="1" Margin="0,8,0,8">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource MaterialDesignHeadline6TextBlock}" Text="Đối tượng cài đặt" />
+                        <RadioButton
+                            Height="20"
+                            Margin="0,16,0,4"
+                            Command="{Binding GetInfoSourceInSettingByRoleCommand}"
+                            Content="Sinh viên"
+                            FontSize="16"
+                            GroupName="Role"
+                            IsChecked="{Binding ListCheck[0], UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                            <RadioButton.Style>
+                                <Style BasedOn="{StaticResource MaterialDesignAccentRadioButton}" TargetType="RadioButton">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Cursor" Value="Hand" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </RadioButton.Style>
+                        </RadioButton>
+                        <RadioButton
+                            Height="20"
+                            Margin="0,4"
+                            Command="{Binding GetInfoSourceInSettingByRoleCommand}"
+                            Content="Giáo viên"
+                            FontSize="16"
+                            GroupName="Role"
+                            IsChecked="{Binding ListCheck[1], UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                            <RadioButton.Style>
+                                <Style BasedOn="{StaticResource MaterialDesignAccentRadioButton}" TargetType="RadioButton">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Cursor" Value="Hand" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </RadioButton.Style>
+                        </RadioButton>
+                        <RadioButton
+                            Height="20"
+                            Margin="0,4"
+                            Command="{Binding GetInfoSourceInSettingByRoleCommand}"
+                            Content="Admin"
+                            FontSize="16"
+                            GroupName="Role"
+                            IsChecked="{Binding ListCheck[2], UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                            <RadioButton.Style>
+                                <Style BasedOn="{StaticResource MaterialDesignAccentRadioButton}" TargetType="RadioButton">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Cursor" Value="Hand" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </RadioButton.Style>
+                        </RadioButton>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="1">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsSetting}" Value="true">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+
+                </Grid.Style>
+                <StackPanel>
+                    <TextBlock
+                        Margin="0,8,0,4"
+                        Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                        Text="Các trường thông tin hiện tại" />
+                    <ItemsControl ItemsSource="{Binding InfoSource, UpdateSourceTrigger=PropertyChanged}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Margin="-8,4" Columns="2" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <!--<StackPanel>-->
+                                    <materialDesign:Card
+                                        Margin="8"
+                                        Padding="8"
+                                        Style="{StaticResource CardContainer}">
+
+                                        <component:SettingInfoItem
+                                            Grid.Row="0"
+                                            MinWidth="600"
+                                            Background="Transparent" />
+                                    </materialDesign:Card>
+
+                                    <!--<Border
+                                                Margin="0,8"
+                                                VerticalAlignment="Bottom"
+                                                Style="{StaticResource HorizontalDividerBorder}" />-->
+                                    <!--</StackPanel>-->
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <TextBlock
+                        Margin="0,8"
+                        Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                        Text="Các trường thông tin đã bị xoá" />
+                    <ItemsControl ItemsSource="{Binding DeleteSource, UpdateSourceTrigger=PropertyChanged}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Margin="-4,0" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <component:DeleteInfoItem MaxWidth="240" />
+
+                                </StackPanel>
+
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Grid>
+
+            <Grid Grid.Row="2" Margin="0,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <Button
+                    Grid.Column="1"
+                    Command="{Binding ConfirmSettingCommand}"
+                    Content="Xác nhận"
+                    Style="{StaticResource PrimaryButton}" />
+            </Grid>
+
+        </Grid>
+
+
+    </ScrollViewer>
+
+</UserControl>
+
+
